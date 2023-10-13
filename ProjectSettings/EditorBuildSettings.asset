@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/sr_fishfingerunderpass.unity
     guid: a7041369edf4fd145b4476912cff3b35
+  - enabled: 1
+    path: Assets/Scenes/sr_smokedsalmonspire.unity
+    guid: 9f6abc3dc47a93f4f8f7bde0eb1f65ac
   m_configObjects: {}

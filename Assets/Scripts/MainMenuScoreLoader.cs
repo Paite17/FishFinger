@@ -1,12 +1,16 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class MainMenuScoreLoader : MonoBehaviour
 {
     public float highScore;
     [SerializeField] private Text highScoreText;
+    [SerializeField] private GameObject eggstraMenu;
+    public bool eggstraWork;
+    public float[] eggstraSeed;
 
     // Start is called before the first frame update
     void Start()
@@ -20,12 +24,29 @@ public class MainMenuScoreLoader : MonoBehaviour
             LoadData();
         }
 
-        highScoreText.text = "Highscore: " + highScore.ToString("F0");
+        if (SceneManager.GetActiveScene().name == "MainMenu")
+        {
+            eggstraWork = false;
+            highScoreText.text = "Highscore: " + highScore.ToString("F0");
+        }
     }
 
-    private void LoadData()
+    public void LoadData()
     {
         PlayerData data = SaveSystem.LoadPlayer();
         highScore = data.highScore;
+        eggstraWork = data.eggstraWork;
+        eggstraSeed = data.gameSeed;
+    }
+
+    public void SaveData()
+    {
+        SaveSystem.SaveGame(this);
+    }
+
+    public void EggstraWorkToggle(bool toggle)
+    {
+        eggstraWork = toggle;
+        eggstraMenu.SetActive(toggle);
     }
 }

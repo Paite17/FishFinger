@@ -75,7 +75,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void InputMovement()
     {
-        if (gm.currentState != GameState.RESULTS)
+        if (gm.currentState != GameState.RESULTS && gm.currentState != GameState.INTRO)
         {
             horizontal = Input.GetAxisRaw("Horizontal");
             vertical = Input.GetAxisRaw("Vertical");

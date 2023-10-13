@@ -28,11 +28,16 @@ public class UIScript : MonoBehaviour
 
     // ResultsScreen
     [SerializeField] private GameObject resultsScreen;
+    [SerializeField] private GameObject waveTagObj;
+    [SerializeField] private GameObject eggstraWaveTagObj;
     [SerializeField] private List<GameObject> waveTick;
-    [SerializeField] private List<Text> waveTickScoreLabel;
+    [SerializeField] private List<GameObject> eggstraWaveTick;
+    [SerializeField] private List<Text> waveTagScoreLabel;
+    [SerializeField] private List<Text> eggstraTickScoreLabel;
     [SerializeField] private Text totalScore;
     [SerializeField] private GameObject newHighScoreLabel;
     [SerializeField] private List<GameObject> waveTags;
+    [SerializeField] private List<GameObject> eggstraWaveTags;
     [SerializeField] private GameObject FadeIn;
 
     //gameover
@@ -47,6 +52,8 @@ public class UIScript : MonoBehaviour
     private Gun currentGun;
 
     private Player player;
+
+    private bool fuck;
 
     private void Awake()
     {
@@ -264,22 +271,22 @@ public class UIScript : MonoBehaviour
         switch (wavesCompleted)
         {
             case 0:
-                waveTickScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
+                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
                 break;
             case 1:
-                waveTickScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
-                waveTickScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
+                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
+                waveTagScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
                 break;
             case 2:
-                waveTickScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
-                waveTickScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
-                waveTickScoreLabel[2].text = gm.totalScorePerWave[2].ToString("F0");
+                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
+                waveTagScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
+                waveTagScoreLabel[2].text = gm.totalScorePerWave[2].ToString("F0");
                 break;
             case 3:
                 // repeated moment
-                waveTickScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
-                waveTickScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
-                waveTickScoreLabel[2].text = gm.totalScorePerWave[2].ToString("F0");
+                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
+                waveTagScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
+                waveTagScoreLabel[2].text = gm.totalScorePerWave[2].ToString("F0");
                 break;
 
         }
@@ -293,6 +300,38 @@ public class UIScript : MonoBehaviour
         StartCoroutine(ResultsScreenLogic());
     }
 
+    // i hate everything
+    private void WaveTagPosCorrection()
+    {
+        if (!fuck)
+        {
+            Debug.LogWarning("change pos please :)))))))");
+            if (gm.currentWave == 1)
+            {
+                waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 725, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
+            }
+
+            if (gm.currentWave > 1)
+            {
+                waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 475, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
+            }
+
+            if (gm.currentWave > 2)
+            {
+                waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 234, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
+            }
+
+            if (gm.currentWave > 4 && gm.xtraWave)
+            {
+                waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 0, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
+            }
+
+            fuck = true;
+        }
+
+
+    }
+
     private IEnumerator ResultsScreenLogic()
     {
         // get some other stuff outta here
@@ -302,6 +341,7 @@ public class UIScript : MonoBehaviour
         waveStartsInText.gameObject.SetActive(false);
         preWaveCountdown.gameObject.SetActive(false);
         endOfWaveCountdown.gameObject.SetActive(false);
+        WaveTagPosCorrection();
         Debug.Log("ResultsScreenLogic() started!");
 
         // new high score check
@@ -312,52 +352,125 @@ public class UIScript : MonoBehaviour
         }
 
         resultsScreen.SetActive(true);
+
         // spawn the funnies
         yield return new WaitForSeconds(0.2f);
-
-        waveTags[0].SetActive(true);
-
-        if (gm.currentWave > 1)
-        {
-            yield return new WaitForSeconds(0.5f);
-            waveTags[1].SetActive(true);
-            
-        }
-
-        if (gm.currentWave > 2)
-        {
-            yield return new WaitForSeconds(0.5f);
-            waveTags[2].SetActive(true);
-        }
-
-        yield return new WaitForSeconds(0.5f);
-
-        // check what was complete
-        // (bad) (terrible) (delete)
-        for (int i = 0; i < gm.waveComplete.Length; i++)
-        {
-            if (gm.waveComplete[i])
-            {
-                waveTick[i].SetActive(true);
-                waveTick[i].GetComponent<Image>().color = new Color32(0, 255, 0, 255);
-            }
-            else
-            {
-                waveTick[i].SetActive(true);
-                waveTick[i].GetComponent<Image>().color = new Color32(255, 0, 0, 255);
-            }
-        }
-
         
-        yield return new WaitForSeconds(3f);
+        // eggstrawork check 
+        if (!gm.eggstraWork)
+        {
 
-        // Quit to menu
-        FadeIn.SetActive(true);
+            waveTags[0].SetActive(true);
 
-        yield return new WaitForSeconds(3f);
-        
+            if (gm.currentWave > 1)
+            {
+                yield return new WaitForSeconds(0.5f);
+                waveTags[1].SetActive(true);
 
-        SceneManager.LoadScene("MainMenu");
+            }
+
+            if (gm.currentWave > 2)
+            {            
+                yield return new WaitForSeconds(0.5f);
+                waveTags[2].SetActive(true);
+            }
+
+            if (gm.currentWave > 4 && gm.xtraWave)
+            {                
+                yield return new WaitForSeconds(0.5f);
+                waveTags[3].SetActive(true);
+            }
+
+            yield return new WaitForSeconds(0.5f);
+
+            // check what was complete
+            // (bad) (terrible) (delete)
+            for (int i = 0; i < gm.waveComplete.Length; i++)
+            {
+                if (gm.waveComplete[i])
+                {
+                    waveTick[i].SetActive(true);
+                    waveTick[i].GetComponent<Image>().color = new Color32(0, 255, 0, 255);
+                }
+                else
+                {
+                    waveTick[i].SetActive(true);
+                    waveTick[i].GetComponent<Image>().color = new Color32(255, 0, 0, 255);
+                }
+            }
+
+
+            yield return new WaitForSeconds(3f);
+
+            // Quit to menu
+            FadeIn.SetActive(true);
+
+            yield return new WaitForSeconds(3f);
+
+
+            SceneManager.LoadScene("MainMenu");
+        }
+        else
+        {
+            eggstraWaveTags[0].SetActive(true);
+
+            if (gm.currentWave > 1)
+            {
+                yield return new WaitForSeconds(0.5f);
+                eggstraWaveTags[1].SetActive(true);
+
+            }
+
+            if (gm.currentWave > 2)
+            {
+                yield return new WaitForSeconds(0.5f);
+                eggstraWaveTags[2].SetActive(true);
+            }
+
+            if (gm.currentWave > 4)
+            {
+                yield return new WaitForSeconds(0.5f);
+                eggstraWaveTags[3].SetActive(true);
+            }
+
+            if (gm.currentWave >= 5)
+            {
+                yield return new WaitForSeconds(0.5f);
+                eggstraWaveTags[4].SetActive(true);
+            }
+
+            yield return new WaitForSeconds(0.5f);
+
+            // check what was complete
+            // (bad) (terrible) (delete)
+            for (int i = 0; i < gm.waveComplete.Length; i++)
+            {
+                if (gm.waveComplete[i])
+                {
+                    eggstraWaveTick[i].SetActive(true);
+                    eggstraWaveTick[i].GetComponent<Image>().color = new Color32(0, 255, 0, 255);
+                }
+                else
+                {
+                    eggstraWaveTick[i].SetActive(true);
+                    eggstraWaveTick[i].GetComponent<Image>().color = new Color32(255, 0, 0, 255);
+                }
+            }
+
+
+            yield return new WaitForSeconds(3f);
+
+            // Quit to menu
+            FadeIn.SetActive(true);
+
+            yield return new WaitForSeconds(3f);
+
+
+            SceneManager.LoadScene("MainMenu");
+        }
+
+
+       
     }
 
     private void SaveScore(float score)

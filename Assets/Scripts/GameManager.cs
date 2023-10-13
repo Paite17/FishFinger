@@ -23,6 +23,7 @@ public class GameManager : MonoBehaviour
     public GameState currentState;
     public bool[] waveComplete;
     public bool xtraWave;
+    public bool eggstraWork;
     public int smellStage;
 
     // game
@@ -49,15 +50,40 @@ public class GameManager : MonoBehaviour
 
     public float[] totalScorePerWave;
 
-// Start is called before the first frame update
-void Start()
+    // Start is called before the first frame update
+    void Start()
     {
+        ui.GetComponent<MainMenuScoreLoader>().LoadData();
+        eggstraWork = ui.GetComponent<MainMenuScoreLoader>().eggstraWork;
 
+        if (spawners[0] == null)
+        {
+            spawners.Clear();
+            FindAllSpawners();
+        }
 
         waveComplete = new bool[maxNumberOfWaves];
         totalScorePerWave = new float[maxNumberOfWaves];
         gameSeed = new float[9];
-        GenerateNewSeed();
+        if (Random.Range(0, 5) == 5)
+        {
+            Debug.Log("XtraWave this game!");
+            xtraWave = true;
+        }
+
+        if (!eggstraWork)
+        {
+            GenerateNewSeed();
+        }
+        else
+        {
+            LoadSeed();
+            xtraWave = false;
+            maxNumberOfWaves = 5;
+        }
+        
+       
+
         currentWave = 1;
         preWaveTimer = 10;
 
@@ -66,6 +92,8 @@ void Start()
             maxNumberOfWaves = 4;
         }
 
+        totalScorePerWave = new float[maxNumberOfWaves];
+        waveComplete = new bool[maxNumberOfWaves];
         StartCoroutine(GameIntro());
 
     }
@@ -84,6 +112,9 @@ void Start()
                     break;
                 case "sr_fishfingerunderpass":
                     introCamAnim.Play("ffCamIntro");
+                    break;
+                case "sr_smokedsalmonspire":
+                    introCamAnim.Play("SSSIntro");
                     break;
                 default:
                     introCamAnim.Play("camIntro");
@@ -106,6 +137,17 @@ void Start()
         }
     }
 
+    // get spawners for if i forget to add them manually
+    private void FindAllSpawners()
+    {
+        var spawner = FindObjectsOfType<EntitySpawner>();
+
+        foreach (var current in spawner)
+        {
+            spawners.Add(current);
+        }
+    }
+
     // generate a seed
     private void GenerateNewSeed()
     {
@@ -123,6 +165,16 @@ void Start()
         gameSeed[2] = Random.Range(3, 12);
         gameSeed[5] = Random.Range(3, 12);
         gameSeed[8] = Random.Range(3, 12);
+    }
+
+    // when in eggstra work mode you use a custom seed
+    private void LoadSeed()
+    {
+        for (int i = 0; i < gameSeed.Length; i++)
+        {
+            ui.GetComponent<MainMenuScoreLoader>().LoadData();
+            gameSeed[i] = ui.GetComponent<MainMenuScoreLoader>().eggstraSeed[i];
+        }
     }
 
     // setting the values of the spawners to that of the seed
@@ -181,7 +233,8 @@ void Start()
     {
         currentState = GameState.POST_WAVE;
         ui.EndOfWave();
-        if (currentWave != 3)
+        // why was this hardcoded to 3??????
+        if (currentWave != maxNumberOfWaves)
         {
             StartCoroutine(EndOfWaveLogic());
         }

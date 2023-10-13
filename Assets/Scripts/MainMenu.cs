@@ -4,18 +4,22 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 using System.IO;
+using System;
 
 public class MainMenu : MonoBehaviour
 {
     [SerializeField] private Dropdown mapDropdown;
     [SerializeField] private GameObject loadingScreen;
     [SerializeField] private Image loadingProgress;
+    [SerializeField] private List<InputField> eggstraSeedInput;
 
+    public float[] eggstraWorkSeed;
 
     private List<string> allSceneNames;
     // Start is called before the first frame update
     void Start()
     {
+        eggstraWorkSeed = new float[9];
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         allSceneNames = new List<string>();
@@ -35,6 +39,14 @@ public class MainMenu : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space))
         {
             ResetDropdown();
+        }
+    }
+
+    private void SetEggstraSeed()
+    {
+        for (int i = 0; i < eggstraWorkSeed.Length; i++)
+        {
+            eggstraWorkSeed[i] = (float)Convert.ToDecimal(eggstraSeedInput[i].text);
         }
     }
 
@@ -61,6 +73,13 @@ public class MainMenu : MonoBehaviour
     // on start button
     public void LoadSelectedScene()
     {
+        if (GetComponent<MainMenuScoreLoader>().eggstraWork)
+        {
+            SetEggstraSeed();
+            GetComponent<MainMenuScoreLoader>().eggstraSeed = eggstraWorkSeed;
+            
+        }
+        GetComponent<MainMenuScoreLoader>().SaveData();
         string sceneName = mapDropdown.options[mapDropdown.value].text;
         StartCoroutine(LoadingManager(sceneName));
     }
