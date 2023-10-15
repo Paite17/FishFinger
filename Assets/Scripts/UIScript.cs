@@ -268,29 +268,30 @@ public class UIScript : MonoBehaviour
             }
         }
 
-        switch (wavesCompleted)
-        {
-            case 0:
-                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
-                break;
-            case 1:
-                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
-                waveTagScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
-                break;
-            case 2:
-                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
-                waveTagScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
-                waveTagScoreLabel[2].text = gm.totalScorePerWave[2].ToString("F0");
-                break;
-            case 3:
-                // repeated moment
-                waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
-                waveTagScoreLabel[1].text = gm.totalScorePerWave[1].ToString("F0");
-                waveTagScoreLabel[2].text = gm.totalScorePerWave[2].ToString("F0");
-                break;
+        Debug.Log("Waves completed: " + wavesCompleted);
 
+        // score text on a tag
+        for (int i = 0; i < wavesCompleted; i++)
+        {
+            Debug.Log("i = " + i);
+            waveTagScoreLabel[i].text = gm.totalScorePerWave[i].ToString("F0");
+
+            if (gm.xtraWave)
+            {
+                // replace this with a check on the name of the boss
+                waveTagScoreLabel[3].text = "Robozuna";
+            }
+
+            if (gm.eggstraWork)
+            {
+                eggstraTickScoreLabel[i].text = gm.totalScorePerWave[i].ToString("F0");
+            }
+            
         }
-        float fullScore = gm.totalScorePerWave[0] + gm.totalScorePerWave[1] + gm.totalScorePerWave[2];
+
+       
+        //float fullScore = gm.totalScorePerWave[0] + gm.totalScorePerWave[1] + gm.totalScorePerWave[2];
+        float fullScore = GetAllScores();
         
         
         totalScore.text = fullScore.ToString("F0");
@@ -298,6 +299,18 @@ public class UIScript : MonoBehaviour
         sideBarStatus.SetActive(false);
         healthSideBar.SetActive(false);
         StartCoroutine(ResultsScreenLogic());
+    }
+
+    // get the full score of the current attempt
+    private float GetAllScores()
+    {
+        float stored = 0;
+        for (int i = 0; i < gm.totalScorePerWave.Length; i++)
+        {
+            stored += gm.totalScorePerWave[i];
+        }
+
+        return stored;
     }
 
     // i hate everything
@@ -311,17 +324,17 @@ public class UIScript : MonoBehaviour
                 waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 725, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
             }
 
-            if (gm.currentWave > 1)
+            if (gm.currentWave == 2)
             {
                 waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 475, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
             }
 
-            if (gm.currentWave > 2)
+            if (gm.currentWave == 3)
             {
                 waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 234, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
             }
 
-            if (gm.currentWave > 4 && gm.xtraWave)
+            if (gm.currentWave == 4 && gm.xtraWave)
             {
                 waveTagObj.GetComponent<RectTransform>().position = new Vector3(waveTagObj.transform.position.x + 0, waveTagObj.transform.position.y, waveTagObj.transform.position.z);
             }

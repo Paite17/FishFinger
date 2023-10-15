@@ -102,6 +102,8 @@ MonoBehaviour:
   moveSpeed: 0
   damage: 25
   scoreBase: 35
+  deathScoreText: {fileID: 1930626978169587890, guid: 16e2651d367843e47b83af9923b918e3,
+    type: 3}
 --- !u!1 &2475208303872513690
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
@@ -8,6 +9,7 @@ public class Enemy : MonoBehaviour
     [SerializeField] private float moveSpeed;
     [SerializeField] private float damage;
     [SerializeField] private float scoreBase;
+    [SerializeField] private GameObject deathScoreText;
     public float EnemyHealthh
     {
         get { return enemyHealth; }
@@ -29,10 +31,14 @@ public class Enemy : MonoBehaviour
     {
         if (enemyHealth <= 0)
         {
-            Destroy(gameObject);
+            Vector3 currentPos = transform.position;
+            Transform camPos = GameObject.Find("CameraPos").transform;
+            GameObject temp = Instantiate(deathScoreText, camPos);
+            temp.transform.position = new Vector3(transform.position.x, transform.position.y , transform.position.z);
 
             float scoreToAdd = scoreBase - (distance / 2);
-
+            temp.GetComponent<TMP_Text>().text = scoreToAdd.ToString("F0");
+            
             Debug.Log(scoreToAdd);
 
             if (scoreToAdd <= 0)
@@ -40,6 +46,8 @@ public class Enemy : MonoBehaviour
                 scoreToAdd = 10;
             }
             GameObject.Find("Player").GetComponent<Player>().AddScore(scoreToAdd);
+
+            Destroy(gameObject);
         }
     }
 }
