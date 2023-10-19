@@ -18180,11 +18180,11 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   ui: {fileID: 1590892450}
-  camAnimator: {fileID: 0}
-  mainCamera: {fileID: 0}
-  introCamera: {fileID: 0}
-  resultsCam: {fileID: 0}
-  introCamAnim: {fileID: 0}
+  camAnimator: {fileID: 905636349}
+  mainCamera: {fileID: 1483788393}
+  introCamera: {fileID: 905636348}
+  resultsCam: {fileID: 1724910009}
+  introCamAnim: {fileID: 905636349}
   totalScorePerWave: []
 --- !u!4 &1951701083
 Transform:
