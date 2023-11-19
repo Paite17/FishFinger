@@ -8,17 +8,18 @@ public class OnKillScoreText : MonoBehaviour
 
     [SerializeField] private float existTime;
     [SerializeField] private float moveSpeed;
+    [SerializeField] private Transform orientation;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        orientation = GameObject.Find("CameraPos").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(Camera.main.transform);
+        transform.LookAt(orientation);
 
         transform.position = new Vector3(transform.position.x, transform.position.y + moveSpeed * Time.deltaTime, transform.position.z);
 
