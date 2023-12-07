@@ -3326,7 +3326,12 @@ MonoBehaviour:
   - {fileID: 1151825975}
   - {fileID: 1070019342}
   - {fileID: 488465566}
-  eggstraTickScoreLabel: []
+  eggstraTickScoreLabel:
+  - {fileID: 103479127}
+  - {fileID: 1031499220}
+  - {fileID: 84776396}
+  - {fileID: 2065146568}
+  - {fileID: 8186986}
   totalScore: {fileID: 1192701737}
   newHighScoreLabel: {fileID: 1822411291}
   waveTags:

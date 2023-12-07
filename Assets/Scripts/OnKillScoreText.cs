@@ -14,12 +14,13 @@ public class OnKillScoreText : MonoBehaviour
     void Start()
     {
         orientation = GameObject.Find("CameraPos").transform;
+
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(orientation);
+        transform.LookAt(orientation.forward);
 
         transform.position = new Vector3(transform.position.x, transform.position.y + moveSpeed * Time.deltaTime, transform.position.z);
 

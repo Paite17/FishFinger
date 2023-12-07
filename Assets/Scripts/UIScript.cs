@@ -271,7 +271,7 @@ public class UIScript : MonoBehaviour
         Debug.Log("Waves completed: " + wavesCompleted);
 
         // score text on a tag
-        for (int i = 0; i < wavesCompleted; i++)
+        for (int i = 0; i < wavesCompleted - 1; i++)
         {
             Debug.Log("i = " + i);
             waveTagScoreLabel[i].text = gm.totalScorePerWave[i].ToString("F0");

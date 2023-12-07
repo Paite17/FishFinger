@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        eggstraWorkSeed = new float[9];
+        eggstraWorkSeed = new float[15];
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         allSceneNames = new List<string>();

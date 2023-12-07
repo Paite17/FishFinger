@@ -62,9 +62,15 @@ public class GameManager : MonoBehaviour
             FindAllSpawners();
         }
 
-        waveComplete = new bool[maxNumberOfWaves];
-        totalScorePerWave = new float[maxNumberOfWaves];
-        gameSeed = new float[9];
+        if (!eggstraWork)
+        {
+            gameSeed = new float[9];
+        }
+        else
+        {
+            gameSeed = new float[15];
+        }
+        
         if (Random.Range(0, 5) == 5)
         {
             Debug.Log("XtraWave this game!");
@@ -200,6 +206,16 @@ public class GameManager : MonoBehaviour
                     spawners[i].SpawnerDifficulty = gameSeed[7];
                     spawners[i].TimeBetweenPulses = gameSeed[8];
                     break;
+                case 4:
+                    spawners[i].AmountOfEnemiesPerPulse = gameSeed[9];
+                    spawners[i].SpawnerDifficulty = gameSeed[10];
+                    spawners[i].TimeBetweenPulses = gameSeed[11];
+                    break;
+                case 5:
+                    spawners[i].AmountOfEnemiesPerPulse = gameSeed[12];
+                    spawners[i].SpawnerDifficulty = gameSeed[13];
+                    spawners[i].TimeBetweenPulses = gameSeed[14];
+                    break;
             }
 
             // activate spawners
@@ -222,7 +238,7 @@ public class GameManager : MonoBehaviour
     {
         preWaveTimer -= Time.deltaTime;
 
-        if (preWaveTimer <= 0)
+        if (preWaveTimer < 0.9)
         {
             WaveStart();
             preWaveTimer = 10;
@@ -309,7 +325,7 @@ public class GameManager : MonoBehaviour
             }
         }
 
-        if (currentWaveTimer <= 0)
+        if (currentWaveTimer < 0.9)
         {
             EndOfWave();
         }
@@ -354,6 +370,7 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("guy died");
         ui.PlayerDies();
+        totalScorePerWave[currentWave] = GameObject.Find("Player").GetComponent<Player>().PlayerScore;
 
         yield return new WaitForSeconds(2f);
 
