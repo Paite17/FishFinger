@@ -55,6 +55,7 @@ public class UIScript : MonoBehaviour
 
     private bool fuck;
 
+
     private void Awake()
     {
         blackFadeOut.SetActive(true);
@@ -271,7 +272,7 @@ public class UIScript : MonoBehaviour
         Debug.Log("Waves completed: " + wavesCompleted);
 
         // score text on a tag
-        for (int i = 0; i < wavesCompleted - 1; i++)
+        for (int i = 0; i < wavesCompleted; i++)
         {
             Debug.Log("i = " + i);
             waveTagScoreLabel[i].text = gm.totalScorePerWave[i].ToString("F0");
@@ -286,9 +287,13 @@ public class UIScript : MonoBehaviour
             {
                 eggstraTickScoreLabel[i].text = gm.totalScorePerWave[i].ToString("F0");
             }
-            
         }
 
+        // for when you haven't completed any wave
+        if (wavesCompleted == 0)
+        {
+            waveTagScoreLabel[0].text = gm.totalScorePerWave[0].ToString("F0");
+        }
        
         //float fullScore = gm.totalScorePerWave[0] + gm.totalScorePerWave[1] + gm.totalScorePerWave[2];
         float fullScore = GetAllScores();
@@ -358,10 +363,11 @@ public class UIScript : MonoBehaviour
         Debug.Log("ResultsScreenLogic() started!");
 
         // new high score check
-        if (Convert.ToSingle(newHighScoreLabel) >= GetHighScore())
+        // WHY WAS I USING THE VALUE FROM THE FUCKING STRING????  AND NOT THE ACTUAL FLOAT
+        if (GetAllScores() >= GetHighScore())
         {
             newHighScoreLabel.SetActive(true);
-            SaveScore(Convert.ToSingle(newHighScoreLabel));
+            SaveScore(GetAllScores());
         }
 
         resultsScreen.SetActive(true);
@@ -397,7 +403,6 @@ public class UIScript : MonoBehaviour
             yield return new WaitForSeconds(0.5f);
 
             // check what was complete
-            // (bad) (terrible) (delete)
             for (int i = 0; i < gm.waveComplete.Length; i++)
             {
                 if (gm.waveComplete[i])
@@ -521,8 +526,10 @@ public class UIScript : MonoBehaviour
         // activate results UI.
 
         yield return new WaitForSeconds(0.5f);
+
         fadeInBackgroundGameOver.SetActive(false);
         gm.SetUpResultsLogic();
         InitialiseResultsScreen();
+        
     }
 }

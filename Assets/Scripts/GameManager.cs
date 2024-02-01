@@ -50,6 +50,7 @@ public class GameManager : MonoBehaviour
 
     public float[] totalScorePerWave;
 
+
     // Start is called before the first frame update
     void Start()
     {
@@ -309,7 +310,7 @@ public class GameManager : MonoBehaviour
         ui.InitialiseResultsScreen();
         mainCamera.SetActive(false);
         resultsCam.SetActive(true);
-
+        
     }
 
     private void ActiveWaveCountdown()
@@ -370,7 +371,8 @@ public class GameManager : MonoBehaviour
     {
         Debug.Log("guy died");
         ui.PlayerDies();
-        totalScorePerWave[currentWave] = GameObject.Find("Player").GetComponent<Player>().PlayerScore;
+        // arrays are hard (originally didn't have the "- 1" bit)
+        totalScorePerWave[currentWave - 1] = GameObject.Find("Player").GetComponent<Player>().PlayerScore;
 
         yield return new WaitForSeconds(2f);
 
@@ -385,7 +387,7 @@ public class GameManager : MonoBehaviour
         currentState = GameState.RESULTS;
         DespawnAllEnemies();
         DeactivateSpawners();
-        totalScorePerWave[currentWave - 1] = GameObject.Find("Player").GetComponent<Player>().PlayerScore;
+        //totalScorePerWave[currentWave - 1] = GameObject.Find("Player").GetComponent<Player>().PlayerScore;
     }
 
     // after wave/game over
