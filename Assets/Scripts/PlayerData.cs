@@ -8,6 +8,7 @@ public class PlayerData
     public float highScore;
     public bool eggstraWork;
     public float[] gameSeed;
+    public bool endlessMode;
     public PlayerData(Player player)
     {
         highScore = player.PlayerScore;
@@ -23,6 +24,7 @@ public class PlayerData
         highScore = data.highScore;
         eggstraWork = data.eggstraWork;
         gameSeed = data.eggstraSeed;
+        endlessMode = data.endlessMode;
     }
 
 }

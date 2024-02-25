@@ -25,6 +25,7 @@ public class GameManager : MonoBehaviour
     public bool xtraWave;
     public bool eggstraWork;
     public int smellStage;
+    public bool endlessMode;
 
     // game
     public int currentWave;
@@ -56,6 +57,7 @@ public class GameManager : MonoBehaviour
     {
         ui.GetComponent<MainMenuScoreLoader>().LoadData();
         eggstraWork = ui.GetComponent<MainMenuScoreLoader>().eggstraWork;
+        endlessMode = ui.GetComponent<MainMenuScoreLoader>().endlessMode;
 
         if (spawners[0] == null)
         {
@@ -97,6 +99,11 @@ public class GameManager : MonoBehaviour
         if (xtraWave)
         {
             maxNumberOfWaves = 4;
+        }
+
+        if (endlessMode)
+        {
+            maxNumberOfWaves = 999;
         }
 
         totalScorePerWave = new float[maxNumberOfWaves];
@@ -172,6 +179,8 @@ public class GameManager : MonoBehaviour
         gameSeed[2] = Random.Range(3, 12);
         gameSeed[5] = Random.Range(3, 12);
         gameSeed[8] = Random.Range(3, 12);
+
+        Debug.Log("Seed: " + gameSeed[0] + gameSeed[1] + gameSeed[2] + gameSeed[3] + gameSeed[4] + gameSeed[5] + gameSeed[6] + gameSeed[7] + gameSeed[8]);
     }
 
     // when in eggstra work mode you use a custom seed
@@ -190,34 +199,44 @@ public class GameManager : MonoBehaviour
         // activate spawners
         for (int i = 0; i < spawners.Count; i++)
         {
-            switch (currentWave)
+            if (!endlessMode)
             {
-                case 1:
-                    spawners[i].AmountOfEnemiesPerPulse = gameSeed[0];
-                    spawners[i].SpawnerDifficulty = gameSeed[1];
-                    spawners[i].TimeBetweenPulses = gameSeed[2];
-                    break;
-                case 2:
-                    spawners[i].AmountOfEnemiesPerPulse = gameSeed[3];
-                    spawners[i].SpawnerDifficulty = gameSeed[4];
-                    spawners[i].TimeBetweenPulses = gameSeed[5];
-                    break;
-                case 3:
-                    spawners[i].AmountOfEnemiesPerPulse = gameSeed[6];
-                    spawners[i].SpawnerDifficulty = gameSeed[7];
-                    spawners[i].TimeBetweenPulses = gameSeed[8];
-                    break;
-                case 4:
-                    spawners[i].AmountOfEnemiesPerPulse = gameSeed[9];
-                    spawners[i].SpawnerDifficulty = gameSeed[10];
-                    spawners[i].TimeBetweenPulses = gameSeed[11];
-                    break;
-                case 5:
-                    spawners[i].AmountOfEnemiesPerPulse = gameSeed[12];
-                    spawners[i].SpawnerDifficulty = gameSeed[13];
-                    spawners[i].TimeBetweenPulses = gameSeed[14];
-                    break;
+                switch (currentWave)
+                {
+                    case 1:
+                        spawners[i].AmountOfEnemiesPerPulse = gameSeed[0];
+                        spawners[i].SpawnerDifficulty = gameSeed[1];
+                        spawners[i].TimeBetweenPulses = gameSeed[2];
+                        break;
+                    case 2:
+                        spawners[i].AmountOfEnemiesPerPulse = gameSeed[3];
+                        spawners[i].SpawnerDifficulty = gameSeed[4];
+                        spawners[i].TimeBetweenPulses = gameSeed[5];
+                        break;
+                    case 3:
+                        spawners[i].AmountOfEnemiesPerPulse = gameSeed[6];
+                        spawners[i].SpawnerDifficulty = gameSeed[7];
+                        spawners[i].TimeBetweenPulses = gameSeed[8];
+                        break;
+                    case 4:
+                        spawners[i].AmountOfEnemiesPerPulse = gameSeed[9];
+                        spawners[i].SpawnerDifficulty = gameSeed[10];
+                        spawners[i].TimeBetweenPulses = gameSeed[11];
+                        break;
+                    case 5:
+                        spawners[i].AmountOfEnemiesPerPulse = gameSeed[12];
+                        spawners[i].SpawnerDifficulty = gameSeed[13];
+                        spawners[i].TimeBetweenPulses = gameSeed[14];
+                        break;
+                }
             }
+            else
+            {
+                spawners[i].AmountOfEnemiesPerPulse = Random.Range(2, 9);
+                spawners[i].SpawnerDifficulty = Random.Range(1, 20);
+                spawners[i].TimeBetweenPulses = Random.Range(3, 12);
+            }
+            
 
             // activate spawners
             if (currentState != GameState.RESULTS)

@@ -11,6 +11,7 @@ public class MainMenuScoreLoader : MonoBehaviour
     [SerializeField] private GameObject eggstraMenu;
     public bool eggstraWork;
     public float[] eggstraSeed;
+    public bool endlessMode;
 
     // Start is called before the first frame update
     void Start()
@@ -37,6 +38,7 @@ public class MainMenuScoreLoader : MonoBehaviour
         highScore = data.highScore;
         eggstraWork = data.eggstraWork;
         eggstraSeed = data.gameSeed;
+        endlessMode = data.endlessMode;
     }
 
     public void SaveData()
