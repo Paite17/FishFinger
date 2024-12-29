@@ -9,22 +9,23 @@ public class OnKillScoreText : MonoBehaviour
     [SerializeField] private float existTime;
     [SerializeField] private float moveSpeed;
     [SerializeField] private Transform orientation;
+    
 
     // Start is called before the first frame update
     void Start()
     {
-        orientation = GameObject.Find("CameraPos").transform;
+        orientation = Camera.main.transform;
 
     }
 
     // Update is called once per frame
     void Update()
     {
-        transform.LookAt(orientation.forward);
+        transform.LookAt(transform.position + orientation.forward);
 
         transform.position = new Vector3(transform.position.x, transform.position.y + moveSpeed * Time.deltaTime, transform.position.z);
 
-        transform.rotation = new Quaternion(transform.rotation.x, -transform.rotation.y, transform.rotation.x, transform.rotation.w);
+        //transform.rotation = new Quaternion(transform.rotation.x, transform.rotation.y, transform.rotation.z, transform.rotation.w);
 
         existTimer += Time.deltaTime;
 
