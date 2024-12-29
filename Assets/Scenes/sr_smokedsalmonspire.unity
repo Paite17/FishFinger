@@ -8894,6 +8894,7 @@ MonoBehaviour:
   eggstraWork: 0
   smellStage: 0
   endlessMode: 0
+  debugMode: 1
   currentWave: 1
   currentWaveTimer: 0
   preWaveTimer: 0

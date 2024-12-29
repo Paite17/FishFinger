@@ -7,6 +7,8 @@ using System;
 
 public class UIScript : MonoBehaviour
 {
+    public static UIScript Instance;
+
     [SerializeField] private Text waveText;
     [SerializeField] private Text scoreText;
     [SerializeField] private Text timeLeft;
@@ -65,6 +67,7 @@ public class UIScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
         currentGun = FindObjectOfType<Gun>();
         crosshair.SetActive(false);
         StartCoroutine(IntroFade());
@@ -74,8 +77,24 @@ public class UIScript : MonoBehaviour
         
         // Get map name
         Scene currentScene = SceneManager.GetActiveScene();
-
-        switch (currentScene.name)
+        
+        if (GameManager.Instance.MapData_ != null)
+        {
+            if (GameManager.Instance.MapData_.MapName != null)
+            {
+                introMapName.text = GameManager.Instance.MapData_.MapName;
+            }
+            else
+            {
+                introMapName.text = currentScene.name;
+            }
+        }
+        else
+        {
+            introMapName.text = currentScene.name;
+        }
+        
+        /*switch (currentScene.name)
         {
             case "sr_spawninggrounds":
                 introMapName.text = "Spawning Grounds";
@@ -90,7 +109,7 @@ public class UIScript : MonoBehaviour
                 // if i don't make a specific case for a map then use this
                 introMapName.text = currentScene.name;
                 break;
-        }
+        } */
 
     }
 

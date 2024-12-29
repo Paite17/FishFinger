@@ -226,10 +226,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a846fb3d0201d2c41ac76712759ff8b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  movementSpeed: 7
+  movementSpeed: 8
   orientation: {fileID: 7498259538511134967}
   rb: {fileID: 7498259539605748071}
-  groundDrag: 5
+  groundDrag: 3
   playerHeight: 2
   ground:
     serializedVersion: 2

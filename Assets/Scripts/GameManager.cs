@@ -15,7 +15,10 @@ public enum GameState
 
 public class GameManager : MonoBehaviour
 {
+    public static GameManager Instance;
+
     // public modifiers
+    [SerializeField] private MapData mapData_;
     public float difficulty;
     public float[] gameSeed;
     public int maxNumberOfWaves;
@@ -26,7 +29,8 @@ public class GameManager : MonoBehaviour
     public bool eggstraWork;
     public int smellStage;
     public bool endlessMode;
-
+    public bool debugMode;    // temp thing just cus
+    
     // game
     public int currentWave;
     public float currentWaveTimer;
@@ -51,10 +55,15 @@ public class GameManager : MonoBehaviour
 
     public float[] totalScorePerWave;
 
+    public MapData MapData_
+    {
+        get { return mapData_; }
+    }
 
     // Start is called before the first frame update
     void Start()
     {
+        Instance = this;
         ui.GetComponent<MainMenuScoreLoader>().LoadData();
         eggstraWork = ui.GetComponent<MainMenuScoreLoader>().eggstraWork;
         endlessMode = ui.GetComponent<MainMenuScoreLoader>().endlessMode;
@@ -82,7 +91,10 @@ public class GameManager : MonoBehaviour
 
         if (!eggstraWork)
         {
-            GenerateNewSeed();
+            if (!debugMode)
+            {
+                GenerateNewSeed();
+            }            
         }
         else
         {
