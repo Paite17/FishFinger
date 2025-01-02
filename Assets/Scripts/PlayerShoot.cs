@@ -27,4 +27,9 @@ public class PlayerShoot : MonoBehaviour
             gun.shooting = false;
         }
     }
+
+    public void SetGunShoot(Gun gun_)
+    {
+        gun = gun_;
+    }
 }

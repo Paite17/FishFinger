@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-using System;
 
 public class UIScript : MonoBehaviour
 {
@@ -20,6 +19,7 @@ public class UIScript : MonoBehaviour
     [SerializeField] private GameObject sideBarStatus;
     [SerializeField] private GameObject healthSideBar;
     [SerializeField] private Text introMapName;
+    [SerializeField] private Text introMapDescription;
     [SerializeField] private GameObject blackFadeOut;
     [SerializeField] private GameObject whiteFade;
     [SerializeField] private Text healthLabel;
@@ -62,6 +62,7 @@ public class UIScript : MonoBehaviour
     {
         blackFadeOut.SetActive(true);
         introMapName.gameObject.SetActive(true);
+        //introMapDescription.gameObject.SetActive(true);
     }
 
     // Start is called before the first frame update
@@ -80,6 +81,7 @@ public class UIScript : MonoBehaviour
         
         if (GameManager.Instance.MapData_ != null)
         {
+            introMapDescription.text = GameManager.Instance.MapData_.MapDescription;
             if (GameManager.Instance.MapData_.MapName != null)
             {
                 introMapName.text = GameManager.Instance.MapData_.MapName;
@@ -113,11 +115,13 @@ public class UIScript : MonoBehaviour
 
     }
 
+
     private IEnumerator IntroFade()
     {
         yield return new WaitForSeconds(11.5f);
         whiteFade.SetActive(true);
         introMapName.gameObject.SetActive(false);
+        introMapDescription.gameObject.SetActive(false);
     }
 
     // Update is called once per frame
@@ -151,7 +155,24 @@ public class UIScript : MonoBehaviour
         }
 
         healthLabel.text = player.PlayerHealth.ToString();
-        cooldownIndicator.fillAmount = currentGun.cooldownTimer;
+
+        if (!currentGun.cooldownActive)
+        {
+            if (currentGun != null)
+            {
+                float sp = (currentGun.shootingTimer / currentGun.GunData_.TimeUntilCooldown * 100);
+                //Debug.Log(sp);
+                //cooldownIndicator.fillAmount = currentGun.shootingTimer;
+                cooldownIndicator.fillAmount = sp / 100;
+            }            
+        }
+        else
+        {
+            float sp = (currentGun.cooldownTimer / currentGun.GunData_.CooldownLength * 100);
+            //cooldownIndicator.fillAmount = currentGun.cooldownTimer;
+            cooldownIndicator.fillAmount = sp / 100;
+        }
+        
 
         if (gm.xtraWave)
         {
@@ -180,6 +201,11 @@ public class UIScript : MonoBehaviour
 
     }
 
+    public void GunCorrection(Gun thisGun)
+    {
+        currentGun = thisGun;
+    }
+
     // update the sidebars wave number
     private void UpdateSidebarWave()
     {
@@ -193,14 +219,8 @@ public class UIScript : MonoBehaviour
         {
             waveStartsInText.text = "Final wave starts in";
         }
-
-        
+     
         waveText.text = "Wave " + gm.currentWave;
-        if (gm.currentWave == 4 && gm.xtraWave)
-        {
-            waveText.text = "XTRAWAVE";
-            scoreText.text = "Defeat the Giant Boss!";
-        }
 
         timeLeft.text = "" + gm.amountOfTimePerWave;
     }

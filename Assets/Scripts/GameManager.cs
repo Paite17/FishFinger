@@ -19,6 +19,7 @@ public class GameManager : MonoBehaviour
 
     // public modifiers
     [SerializeField] private MapData mapData_;
+    [SerializeField] private List<Gun> gunPool;
     public float difficulty;
     public float[] gameSeed;
     public int maxNumberOfWaves;
@@ -55,15 +56,31 @@ public class GameManager : MonoBehaviour
 
     public float[] totalScorePerWave;
 
+    private Player plr;
+
     public MapData MapData_
     {
         get { return mapData_; }
     }
 
+    public List<Gun> GunPool
+    {
+        get { return gunPool; }
+    }
+
+    private void Awake()
+    {
+        Instance = this;
+    }
+
     // Start is called before the first frame update
     void Start()
     {
-        Instance = this;
+        // this will not fucking work if i add multiplayer
+        plr = FindObjectOfType<Player>();
+        int randomGunDecide = Random.Range(0, gunPool.Count);
+        Debug.Log(randomGunDecide);
+        WeaponSetUp(randomGunDecide);
         ui.GetComponent<MainMenuScoreLoader>().LoadData();
         eggstraWork = ui.GetComponent<MainMenuScoreLoader>().eggstraWork;
         endlessMode = ui.GetComponent<MainMenuScoreLoader>().endlessMode;
@@ -82,12 +99,7 @@ public class GameManager : MonoBehaviour
         {
             gameSeed = new float[15];
         }
-        
-        if (Random.Range(0, 5) == 5)
-        {
-            Debug.Log("XtraWave this game!");
-            xtraWave = true;
-        }
+       
 
         if (!eggstraWork)
         {
@@ -106,7 +118,7 @@ public class GameManager : MonoBehaviour
        
 
         currentWave = 1;
-        preWaveTimer = 10;
+        preWaveTimer = 30;
 
         if (xtraWave)
         {
@@ -174,6 +186,25 @@ public class GameManager : MonoBehaviour
         }
     }
 
+    /// <summary>
+    /// Activates the correct weapon on the player, while deactivating all others
+    /// </summary>
+    private void WeaponSetUp(int newWep)
+    {
+        foreach (var current in gunPool)
+        {
+            if (current != gunPool[newWep])
+            {
+                current.gameObject.SetActive(false);
+            }
+        }
+
+        gunPool[newWep].gameObject.SetActive(true);
+        plr.CurrentlyEquippedGun = gunPool[newWep];
+        FindObjectOfType<PlayerShoot>().SetGunShoot(gunPool[newWep]);
+        UIScript.Instance.GunCorrection(gunPool[newWep]);
+    }
+
     // generate a seed
     private void GenerateNewSeed()
     {
@@ -208,10 +239,14 @@ public class GameManager : MonoBehaviour
     // setting the values of the spawners to that of the seed
     private void SetSpawnerValues()
     {
+
         // activate spawners
         for (int i = 0; i < spawners.Count; i++)
         {
-            if (!endlessMode)
+            spawners[i].AmountOfEnemiesPerPulse = Random.Range(2, 9);
+            spawners[i].SpawnerDifficulty = Random.Range(1, 20);
+            spawners[i].TimeBetweenPulses = Random.Range(3, 12);
+            /*if (!endlessMode)
             {
                 switch (currentWave)
                 {
@@ -247,7 +282,7 @@ public class GameManager : MonoBehaviour
                 spawners[i].AmountOfEnemiesPerPulse = Random.Range(2, 9);
                 spawners[i].SpawnerDifficulty = Random.Range(1, 20);
                 spawners[i].TimeBetweenPulses = Random.Range(3, 12);
-            }
+            } */
             
 
             // activate spawners
@@ -323,6 +358,8 @@ public class GameManager : MonoBehaviour
 
             // start countdown again
             currentState = GameState.PRE_WAVE;
+            int randomGunDecide = Random.Range(0, gunPool.Count + 1);
+            WeaponSetUp(randomGunDecide);
         }
     }
 

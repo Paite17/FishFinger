@@ -6,6 +6,7 @@ public class Player : MonoBehaviour
 {
     [SerializeField] private float playerHealth = 100;
     [SerializeField] private float playerScore;
+    [SerializeField] private Gun currentlyEquippedGun;
 
     private GameManager gm;
 
@@ -19,6 +20,12 @@ public class Player : MonoBehaviour
     {
         get { return playerScore; }
         set { playerScore = value; }
+    }
+
+    public Gun CurrentlyEquippedGun
+    {
+        get { return currentlyEquippedGun; }
+        set { currentlyEquippedGun = value; }
     }
 
     // Start is called before the first frame update

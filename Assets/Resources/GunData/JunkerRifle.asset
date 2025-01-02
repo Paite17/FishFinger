@@ -10,11 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 623d613988b380a47a9cfcaf693bbaaf, type: 3}
-  m_Name: LewisGun
+  m_Name: JunkerRifle
   m_EditorClassIdentifier: 
-  weaponName: The Lewis GunTM
-  damage: 24
-  maxDistance: 200
+  weaponName: Junker Rifle
+  damage: 200
+  maxDistance: 600
   fireRate: 600
-  timeUntilCooldown: 1
-  cooldownLength: 1
+  timeUntilCooldown: 0.01
+  cooldownLength: 0.1

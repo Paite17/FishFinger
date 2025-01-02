@@ -22,6 +22,7 @@ public class GunData : ScriptableObject
     // data
     [SerializeField] private float fireRate;
     [SerializeField] private float timeUntilCooldown;
+    [SerializeField] private float cooldownLength;
 
     public string WeaponName
     {
@@ -46,5 +47,10 @@ public class GunData : ScriptableObject
     public float MaxDistance
     {
         get { return maxDistance; }
+    }
+
+    public float CooldownLength
+    {
+        get { return cooldownLength; }
     }
 }
